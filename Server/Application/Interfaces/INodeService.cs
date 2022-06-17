@@ -10,7 +10,7 @@ namespace Application.Interfaces
     {
         public List<NodeDto> GetAll();
         public NodeDto Get(int id);
-        public void Add(NodeDto node);
+        public void Add(NodeDtoRequest node);
         public void Edit(NodeDto node);
         public void Delete(int id);
 

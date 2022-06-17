@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Application.Interfaces;
 using Domain.Models;
 
 namespace Application.DTO;

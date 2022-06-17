@@ -31,6 +31,13 @@ public class NodeController : ControllerBase
         return StatusCode((int)HttpStatusCode.OK, service.Get(id));
     }
 
+    [HttpPost]
+    public ActionResult Post(NodeDtoRequest nodeDtoRequest)
+    {
+        service.Add(nodeDtoRequest);
+        return StatusCode((int)HttpStatusCode.OK);
+    }
+
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {

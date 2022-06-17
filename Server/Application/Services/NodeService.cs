@@ -25,9 +25,9 @@ namespace Application.Services
             return new NodeDto(repository.Get(id));
         }
 
-        public void Add(NodeDto node)
+        public void Add(NodeDtoRequest node)
         {
-            throw new NotImplementedException();
+            repository.Add(node.ToModel());
         }
 
         public void Edit(NodeDto node)

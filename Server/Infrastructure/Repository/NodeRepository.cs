@@ -29,7 +29,8 @@ namespace Infrastructure.Repository
 
         public void Add(Node node)
         {
-            throw new NotImplementedException();
+            db.Nodes.Add(node);
+            db.SaveChanges();
         }
 
         public void Edit(Node node)
