@@ -25,9 +25,9 @@ namespace Application.Services
             return new NodeDtoResponse(repository.Get(id));
         }
 
-        public void Add(NodeDtoPostRequest node)
+        public int Add(NodeDtoPostRequest node)
         {
-            repository.Add(node.ToModel());
+            return repository.Add(node.ToModel());
         }
 
         public void Edit(NodeDtoPutRequest node)

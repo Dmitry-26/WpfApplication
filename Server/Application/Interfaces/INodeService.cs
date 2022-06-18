@@ -10,7 +10,7 @@ namespace Application.Interfaces
     {
         public List<NodeDtoResponse> GetAll();
         public NodeDtoResponse Get(int id);
-        public void Add(NodeDtoPostRequest node);
+        public int Add(NodeDtoPostRequest node);
         public void Edit(NodeDtoPutRequest node);
         public void Delete(int id);
 

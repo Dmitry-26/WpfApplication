@@ -10,7 +10,7 @@ namespace Domain.Repository
     {
         public IQueryable<Node> GetAll();
         public Node Get(int id);
-        public void Add(Node node);
+        public int Add(Node node);
         public void Edit(Node node);
         public void Delete(int id);
     }
