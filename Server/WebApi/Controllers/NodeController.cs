@@ -20,21 +20,28 @@ public class NodeController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<NodeDto>> Get()
+    public ActionResult<List<NodeDtoResponse>> Get()
     {
         return StatusCode((int)HttpStatusCode.OK, service.GetAll());
     }
 
     [HttpGet("{id}")]
-    public ActionResult<NodeDto> Get(int id)
+    public ActionResult<NodeDtoResponse> Get(int id)
     {
         return StatusCode((int)HttpStatusCode.OK, service.Get(id));
     }
 
-    [HttpPost]
-    public ActionResult Post(NodeDtoRequest nodeDtoRequest)
+    [HttpPut]
+    public ActionResult Edit(NodeDtoPutRequest node)
     {
-        service.Add(nodeDtoRequest);
+        service.Edit(node);
+        return StatusCode((int)HttpStatusCode.OK);
+    }
+
+    [HttpPost]
+    public ActionResult Post(NodeDtoPostRequest node)
+    {
+        service.Add(node);
         return StatusCode((int)HttpStatusCode.OK);
     }
 

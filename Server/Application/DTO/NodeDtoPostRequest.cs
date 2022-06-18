@@ -7,7 +7,7 @@ using Domain.Models;
 
 namespace Application.DTO
 {
-    public class NodeDtoRequest : IDtoMapper<Node>
+    public class NodeDtoPostRequest : IDtoMapper<Node>
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

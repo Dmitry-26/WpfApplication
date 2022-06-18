@@ -35,7 +35,25 @@ namespace Infrastructure.Repository
 
         public void Edit(Node node)
         {
-            throw new NotImplementedException();
+            Node entity = db.Nodes.Find(node.Id) ?? throw new NodeNotFoundException($"node with Id = {node.Id} not found");
+            if (node.ParentId == null)
+            {
+                entity.ParentId = node.ParentId;
+            }
+            else
+            {
+                if (db.Nodes.Find(node.ParentId) != null)
+                {
+                    entity.ParentId = node.ParentId;
+                }
+                else
+                {
+                    throw new NodeNotFoundException($"node with Id = {node.Id} not found");
+                }
+            }
+            entity.Name = node.Name;
+            entity.Description = node.Description;
+            db.SaveChanges();
         }
 
         public void Delete(int id)

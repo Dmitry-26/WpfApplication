@@ -15,24 +15,24 @@ namespace Application.Services
         {
             this.repository = repository;
         }
-        public List<NodeDto> GetAll()
+        public List<NodeDtoResponse> GetAll()
         {
-            return repository.GetAll().Select(node => new NodeDto(node)).ToList();
+            return repository.GetAll().Select(node => new NodeDtoResponse(node)).ToList();
         }
 
-        public NodeDto Get(int id)
+        public NodeDtoResponse Get(int id)
         {
-            return new NodeDto(repository.Get(id));
+            return new NodeDtoResponse(repository.Get(id));
         }
 
-        public void Add(NodeDtoRequest node)
+        public void Add(NodeDtoPostRequest node)
         {
             repository.Add(node.ToModel());
         }
 
-        public void Edit(NodeDto node)
+        public void Edit(NodeDtoPutRequest node)
         {
-            throw new NotImplementedException();
+            repository.Edit(node.ToModel());
         }
 
         public void Delete(int id)

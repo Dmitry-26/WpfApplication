@@ -8,10 +8,10 @@ namespace Application.Interfaces
 {
     public interface INodeService
     {
-        public List<NodeDto> GetAll();
-        public NodeDto Get(int id);
-        public void Add(NodeDtoRequest node);
-        public void Edit(NodeDto node);
+        public List<NodeDtoResponse> GetAll();
+        public NodeDtoResponse Get(int id);
+        public void Add(NodeDtoPostRequest node);
+        public void Edit(NodeDtoPutRequest node);
         public void Delete(int id);
 
     }
