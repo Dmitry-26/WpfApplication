@@ -3,20 +3,22 @@ using System.Net;
 using Application.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Application.Interfaces;
+using Domain.Exceptions;
+using Domain.Errors;
 
 namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class NodeController : ControllerBase
+public class NodeController : ApplicationController
 {
     private readonly ILogger<NodeController> _logger;
     private INodeService service;
 
     public NodeController(ILogger<NodeController> logger, INodeService service)
+        : base(logger)
     {
         this.service = service;
-        _logger = logger;
     }
 
     [HttpGet]
@@ -28,27 +30,94 @@ public class NodeController : ControllerBase
     [HttpGet("{id}")]
     public ActionResult<NodeDtoResponse> Get(int id)
     {
-        return StatusCode((int)HttpStatusCode.OK, service.Get(id));
+        NodeDtoResponse response;
+        try
+        {
+            response = service.Get(id);
+        }
+        catch (NodeNotFoundException e)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.NotFound,
+                new ErrorResponse(new Error(Error.CommonErrorCodes.DataIsNotFound.ToString(), e.Message) { Target = nameof(id) }));
+        }
+        catch (Exception)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+
+        return StatusCode((int)HttpStatusCode.OK);
+
     }
 
     [HttpPut]
     public ActionResult Edit(NodeDtoPutRequest node)
     {
-        service.Edit(node);
-        return StatusCode((int)HttpStatusCode.OK);
+        try
+        {
+            service.Edit(node);
+        }
+        catch (ModelValidationException e)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.UnprocessableEntity,
+                new ErrorResponse(new Error(Error.CommonErrorCodes.BadArgument.ToString(), e.Message) { Target = nameof(node), Details = GetErrorDetails(e) }));
+        }
+        catch (NodeNotFoundException e)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.NotFound,
+                new ErrorResponse(new Error(Error.CommonErrorCodes.DataIsNotFound.ToString(), e.Message) { Target = nameof(node) }));
+        }
+        catch (Exception)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+
+        return StatusCode((int)HttpStatusCode.NoContent);
     }
 
     [HttpPost]
-    public ActionResult Post(NodeDtoPostRequest node)
+    public ActionResult Add(NodeDtoPostRequest node)
     {
-        service.Add(node);
-        return StatusCode((int)HttpStatusCode.OK);
+        int nodeId = default;
+        try
+        {
+            nodeId = service.Add(node);
+        }
+        catch (ModelValidationException e)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.UnprocessableEntity,
+                new ErrorResponse(new Error(Error.CommonErrorCodes.BadArgument.ToString(), e.Message) { Target = nameof(node), Details = GetErrorDetails(e) }));
+        }
+        catch (NodeNotFoundException e)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.NotFound,
+                new ErrorResponse(new Error(Error.CommonErrorCodes.DataIsNotFound.ToString(), e.Message) { Target = nameof(node) }));
+        }
+        catch (Exception)
+        {
+            return StatusCode((int)HttpStatusCode.InternalServerError);
+        }
+        return StatusCode((int)HttpStatusCode.Created, nodeId);
     }
 
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
-        service.Delete(id);
-        return StatusCode((int)HttpStatusCode.OK);
+        try
+        {
+            service.Delete(id);
+        }
+        catch (NodeNotFoundException e)
+        {
+            return StatusCode(
+                (int)HttpStatusCode.NotFound,
+                new ErrorResponse(new Error(Error.CommonErrorCodes.DataIsNotFound.ToString(), e.Message) { Target = nameof(id) }));
+        }
+
+        return StatusCode((int)HttpStatusCode.NoContent);
     }
 }
