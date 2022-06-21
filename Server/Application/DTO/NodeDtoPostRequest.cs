@@ -12,6 +12,7 @@ namespace Application.DTO
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public int? ParentId { get; set; }
+        public List<NodeDtoPostRequest> Children {get;set;} = new List<NodeDtoPostRequest>();
 
         public Node ToModel()
         {
@@ -20,6 +21,7 @@ namespace Application.DTO
                 Name = this.Name,
                 Description = this.Description,
                 ParentId = this.ParentId,
+                Children = this.Children.Select(child => child.ToModel()).ToList()
             };
         }
     }

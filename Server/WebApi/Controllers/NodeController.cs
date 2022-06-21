@@ -46,7 +46,7 @@ public class NodeController : ApplicationController
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
 
-        return StatusCode((int)HttpStatusCode.OK);
+        return StatusCode((int)HttpStatusCode.OK, response);
 
     }
 
@@ -78,12 +78,12 @@ public class NodeController : ApplicationController
     }
 
     [HttpPost]
-    public ActionResult Add(NodeDtoPostRequest node)
+    public ActionResult<List<int>> Add(NodeDtoPostRequest node)
     {
-        int nodeId = default;
+        List<int> Ids = new List<int>();
         try
         {
-            nodeId = service.Add(node);
+            Ids = service.Add(node);
         }
         catch (ModelValidationException e)
         {
@@ -101,7 +101,7 @@ public class NodeController : ApplicationController
         {
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
-        return StatusCode((int)HttpStatusCode.Created, nodeId);
+        return StatusCode((int)HttpStatusCode.Created, Ids);
     }
 
     [HttpDelete("{id}")]

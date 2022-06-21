@@ -20,18 +20,27 @@ namespace Infrastructure.Repository
         {
             this.db = db;
         }
-        public IQueryable<Node> GetAll()
+        public List<Node> GetAll()
         {
-            return db.Nodes.Where(node => node.ParentId == null).Include(x => x.Children).ThenInclude(x => x.Children).AsNoTracking();
+            var nodes = db.Nodes.Include(x => x.Children).Where(node => node.ParentId == null).ToList();
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                nodes[i] = Get(nodes[i].Id);
+            }
+            return nodes;
         }
 
         public Node Get(int id)
         {
-            return db.Nodes.Include(x => x.Children).ThenInclude(x => x.Children).SingleOrDefault(node => node.Id == id) ??
-            throw new NodeNotFoundException($"node with Id = {id} not found");
+            Node node = db.Nodes.Include(x => x.Children).SingleOrDefault(node => node.Id == id) ?? throw new NodeNotFoundException($"node with Id = {id} not found");
+            for (int i = 0; i < node.Children.Count; i++)
+            {
+                node.Children[i] = Get(node.Children[i].Id);
+            }
+            return node;
         }
 
-        public int Add(Node node)
+        public List<int> Add(Node node)
         {
             new NodeValidator().Validate(node);
             if (node.ParentId != null && db.Nodes.Find(node.ParentId) == null)
@@ -40,7 +49,17 @@ namespace Infrastructure.Repository
             }
             db.Nodes.Add(node);
             db.SaveChanges();
-            return node.Id;
+            List<int> Ids = new List<int>() { node.Id };
+            GetChildsId(node);
+            void GetChildsId(Node node)
+            {
+                foreach (Node child in node.Children)
+                {
+                    Ids.Add(child.Id);
+                    GetChildsId(child);
+                }
+            }
+            return Ids;
         }
 
         public void Edit(Node node)

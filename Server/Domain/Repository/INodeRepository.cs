@@ -8,9 +8,9 @@ namespace Domain.Repository
 {
     public interface INodeRepository
     {
-        public IQueryable<Node> GetAll();
+        public List<Node> GetAll();
         public Node Get(int id);
-        public int Add(Node node);
+        public List<int> Add(Node node);
         public void Edit(Node node);
         public void Delete(int id);
     }
