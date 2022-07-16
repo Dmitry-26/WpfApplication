@@ -1,0 +1,78 @@
+﻿<Window x:Class="WpfApplication.AddNewNodeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplication"
+        xmlns:ViewModels="clr-namespace:WpfApplication.ViewModels"
+        mc:Ignorable="d"
+        Title="AddNewElementWindow" Height="200" Width="340" MinWidth="340">
+    <Window.Resources>
+        <ViewModels:NodeViewModel x:Key="data"/>
+        <Style x:Key="textBoxInError" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Name of parent's Node" TextWrapping="WrapWithOverflow"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=ParentNode.Name}"  TextWrapping="WrapWithOverflow"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Description of parent's Node" Grid.RowSpan="2"  TextWrapping="WrapWithOverflow"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=ParentNode.Description}"  TextWrapping="WrapWithOverflow"/>
+
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Name:" TextWrapping="WrapWithOverflow"/>
+            <TextBox Grid.Row="0" 
+                     Grid.Column="1"
+                     Style="{StaticResource textBoxInError}"
+                     TextWrapping="WrapWithOverflow"
+                     Text="{Binding Path=NewNode.Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}">
+            </TextBox>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Description:" Grid.RowSpan="2" TextWrapping="WrapWithOverflow"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Style="{StaticResource textBoxInError}"
+                     TextWrapping="WrapWithOverflow"
+                     Text="{Binding Path=NewNode.Description, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Center" >
+            <Button VerticalAlignment="Center"
+                    MinWidth="64"
+                    Content="Save"
+                    Command="{Binding Path=SaveCommand}"
+                    CommandParameter="{Binding Path=NewNode}"/>
+            <Button VerticalAlignment="Center" 
+                    MinWidth="64"
+                    Content="Cancel" 
+                    IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>
