@@ -88,12 +88,7 @@ namespace WpfApplication.ViewModels
                 newWindow.Owner = Application.Current.MainWindow;
                 if (newWindow.ShowDialog() == true)
                 {
-                    this.Nodes.Clear();
-                    var newNodes = new ServerApi(new Uri("http://localhost:5250/api/Node")).GetData();
-                    for (int i = 0; i < newNodes.Count; i++)
-                    {
-                        this.Nodes.Add(newNodes[i]);
-                    }
+                    this.Nodes = new ObservableCollection<Node>(new ServerApi(new Uri("http://localhost:5250/api/Node")).GetData());
                     return;
                 }
             }
