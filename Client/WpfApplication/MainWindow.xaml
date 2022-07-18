@@ -30,7 +30,7 @@
                             </WrapPanel>
                             <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="center">
                                 <Button MinWidth="64" Content="Create" HorizontalAlignment="Center"
-                                        Command="{Binding Source={StaticResource ViewModel}, Path=CreateNode}"
+                                        Command="{Binding Source={StaticResource ViewModel}, Path=OpenNewNodeCreatingWindow}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=SelectedItem}" >
                                 </Button>
                                 <Button MinWidth="64" Content="Delete" HorizontalAlignment="Center" 

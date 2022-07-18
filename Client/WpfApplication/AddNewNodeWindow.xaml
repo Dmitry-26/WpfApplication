@@ -67,8 +67,9 @@
             <Button VerticalAlignment="Center"
                     MinWidth="64"
                     Content="Save"
-                    Command="{Binding Path=SaveCommand}"
-                    CommandParameter="{Binding Path=NewNode}"/>
+                    Click="SaveClicked"/>
+            <!-- Command="{Binding Path=SaveCommand}"
+                    CommandParameter="{Binding Path=NewNode}"/> -->
             <Button VerticalAlignment="Center" 
                     MinWidth="64"
                     Content="Cancel" 

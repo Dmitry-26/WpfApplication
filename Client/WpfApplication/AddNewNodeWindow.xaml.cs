@@ -21,9 +21,26 @@ namespace WpfApplication
     /// </summary>
     public partial class AddNewNodeWindow : Window
     {
-        public AddNewNodeWindow()
+        private AddNodeViewModel viewModel;
+        public AddNewNodeWindow(Node parentNode)
         {
             InitializeComponent();
+            this.viewModel = parentNode == null ? new AddNodeViewModel() : new AddNodeViewModel(parentNode);
+            this.DataContext = this.viewModel;
+        }
+        public void SaveClicked(object obj, EventArgs e)
+        {
+            if (this.viewModel.SaveCommandCanExecute())
+            {
+                this.viewModel.SaveCommandExecute();
+            }
+            else
+            {
+                MessageBox.Show("new Node didn't pass validation");
+                return;
+            }
+            this.DialogResult = true;
+            this.Close();
         }
     }
 }

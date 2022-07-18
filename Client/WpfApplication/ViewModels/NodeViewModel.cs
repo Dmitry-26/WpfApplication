@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using WpfApplication.Commands;
 using WpfApplication.Models;
@@ -9,13 +10,11 @@ using WpfApplication.NetServices;
 
 namespace WpfApplication.ViewModels
 {
-    public class NodeViewModel : INotifyPropertyChanged
+    public class NodeViewModel : ViewModelBase
     {
         public NodeViewModel()
         {
             Nodes = new ObservableCollection<Node>(new ServerApi(new Uri("http://localhost:5250/api/node")).GetData());
-            DeleteNode = new DeleteNodeCommand(this);
-            CreateNode = new AddNodeCommand(this);
         }
         private Node selectedNode;
         public Node SelectedNode
@@ -39,14 +38,67 @@ namespace WpfApplication.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        public ICommand DeleteNode { get; }
-        public ICommand CreateNode { get; }
-
-        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public ICommand DeleteNode
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get => new RelayCommand
+            (
+                parameter => DeleteNodeExecute(parameter),
+                parameter => DeleteNodeCanExecute(parameter)
+            );
         }
+        public ICommand OpenNewNodeCreatingWindow
+        {
+            get => new RelayCommand
+            (
+                parameter => OpenNewNodeCreatingWindowExecute(parameter)
+            );
+        }
+
+        #region Commands
+        public void DeleteNodeExecute(object parameter)
+        {
+            Node node = parameter as Node ?? throw new Exception("node for deleting is null");
+            new ServerApi(new Uri("http://localhost:5250/api/node")).Delete(node.Id);
+            Nodes = new ObservableCollection<Node>(new ServerApi(new Uri("http://localhost:5250/api/node")).GetData());
+
+        }
+        public bool DeleteNodeCanExecute(object parameter)
+        {
+            return parameter is Node;
+        }
+        public void OpenNewNodeCreatingWindowExecute(object parameter)
+        {
+            if (parameter is null)
+            {
+                ShowWindow();
+                return;
+            }
+            if (parameter is Node p)
+            {
+                ShowWindow(p);
+            }
+            else
+            {
+                throw new Exception("parameter is not a Node");
+            }
+            void ShowWindow(Node parentNode = null)
+            {
+                AddNewNodeWindow newWindow = new AddNewNodeWindow(parentNode);
+                newWindow.Owner = Application.Current.MainWindow;
+                if (newWindow.ShowDialog() == true)
+                {
+                    this.Nodes.Clear();
+                    var newNodes = new ServerApi(new Uri("http://localhost:5250/api/Node")).GetData();
+                    for (int i = 0; i < newNodes.Count; i++)
+                    {
+                        this.Nodes.Add(newNodes[i]);
+                    }
+                    return;
+                }
+            }
+        }
+        #endregion
+
     }
 }
