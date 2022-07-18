@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DoWpfApplication.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,7 +12,7 @@ using WpfApplication.NetServices;
 
 namespace WpfApplication.Models
 {
-    public class Node : INotifyPropertyChanged
+    public class Node : ModelBase
     {
         private int id;
         public int Id 
@@ -81,9 +82,9 @@ namespace WpfApplication.Models
         }
 
         public ObservableCollection<Node> Children { get; set; }
+        public override event PropertyChangedEventHandler PropertyChanged;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        public override void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {

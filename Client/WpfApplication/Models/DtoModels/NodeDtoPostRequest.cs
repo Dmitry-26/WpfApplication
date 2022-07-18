@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DoWpfApplication.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +16,7 @@ using WpfApplication.Models;
 namespace DoWpfApplication.DtoModels
 {
     [DataContract]
-    public class NodeDtoPostRequest : INotifyPropertyChanged, IDataErrorInfo
+    public class NodeDtoPostRequest : ModelBase, IDataErrorInfo
     {
         [DataMember]
         private string name;
@@ -48,8 +49,6 @@ namespace DoWpfApplication.DtoModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public NodeDtoPostRequest(Node node)
         {
             this.Name = node.Name;
@@ -60,11 +59,6 @@ namespace DoWpfApplication.DtoModels
         public NodeDtoPostRequest()
         {
         }
-        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public bool IsValid()
         {
             return !string.IsNullOrWhiteSpace(this.Name) && !string.IsNullOrWhiteSpace(this.Description);
