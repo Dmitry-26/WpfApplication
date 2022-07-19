@@ -1,15 +1,23 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace WpfApplication.ViewModels
+﻿namespace WpfApplication.ViewModels
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    /// <summary>
+    /// Base ViewModel.
+    /// </summary>
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
+        /// <inheritdoc/>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Raises PropertyChangedEvent.
+        /// </summary>
+        /// <param name="propertyName">Property which changed.</param>
         public void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

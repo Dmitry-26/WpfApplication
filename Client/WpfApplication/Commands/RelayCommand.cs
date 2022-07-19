@@ -1,37 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace WpfApplication.Commands
+﻿namespace WpfApplication.Commands
 {
+    using System;
+    using System.Windows.Input;
+
+    /// <summary>
+    /// RelayCommand for commands.
+    /// </summary>
     public class RelayCommand : ICommand
     {
         private Action<object> execute;
         private Predicate<object> canExecute;
 
-        public event EventHandler CanExecuteChanged
-        {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
-        }
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RelayCommand"/> class.
+        /// </summary>
+        /// <param name="execute">Action.</param>
+        /// <param name="canExecute">A predicate that determines whether a command can be executed or not.</param>
         public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
             this.execute = execute;
             this.canExecute = canExecute;
         }
 
-        public bool CanExecute(object parameter)
+        /// <inheritdoc/>
+        public event EventHandler CanExecuteChanged
         {
-            return canExecute == null || canExecute(parameter);
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
+        /// <inheritdoc/>
+        public bool CanExecute(object parameter)
+        {
+            return this.canExecute == null || this.canExecute(parameter);
+        }
+
+        /// <inheritdoc/>
         public void Execute(object parameter)
         {
-            execute(parameter);
+            this.execute(parameter);
         }
     }
 }

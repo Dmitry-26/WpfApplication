@@ -1,14 +1,23 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace DoWpfApplication.Models
+﻿namespace WpfApplication.Models
 {
-    public class ModelBase : INotifyPropertyChanged
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    /// <summary>
+    /// Base class for models.
+    /// </summary>
+    public abstract class ModelBase : INotifyPropertyChanged
     {
+        /// <inheritdoc/>
         public virtual event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises PropertyChangedEvent.
+        /// </summary>
+        /// <param name="propertyName">Property which changed.</param>
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

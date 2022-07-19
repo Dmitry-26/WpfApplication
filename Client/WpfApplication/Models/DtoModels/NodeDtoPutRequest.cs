@@ -1,24 +1,84 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WpfApplication.Models;
-
-namespace WpfApplication.DtoModels
+﻿namespace WpfApplication.Models.DtoModels
 {
-    public class NodeDtoPutRequest
+    using System.Runtime.Serialization;
+
+    /// <summary>
+    /// Dto model of Node for Put requests.
+    /// </summary>
+    [DataContract]
+    public class NodeDtoPutRequest : ModelBase
     {
-        public int id;
-        public string name;
-        public string description;
-        public int? parentId;
+        [DataMember]
+        private int id;
+        [DataMember]
+        private string name;
+        [DataMember]
+        private string description;
+        [DataMember]
+        private int? parentId;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NodeDtoPutRequest"/> class.
+        /// </summary>
+        /// <param name="node">Node.</param>
         public NodeDtoPutRequest(Node node)
         {
-            this.id = node.Id;
-            this.name = node.Name;
-            this.description = node.Description;
-            this.parentId = node.ParentId;
+            this.Id = node.Id;
+            this.Name = node.Name;
+            this.Description = node.Description;
+            this.ParentId = node.ParentId;
+        }
+
+        /// <summary>
+        /// Gets or sets id of Node.
+        /// </summary>
+        public int Id
+        {
+            get => this.id;
+            set
+            {
+                this.id = value;
+                this.OnPropertyChanged(nameof(this.Id));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets name of Node.
+        /// </summary>
+        public string Name
+        {
+            get => this.name;
+            set
+            {
+                this.name = value;
+                this.OnPropertyChanged(nameof(this.Name));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets id of Node.
+        /// </summary>
+        public string Description
+        {
+            get => this.description;
+            set
+            {
+                this.description = value;
+                this.OnPropertyChanged(nameof(this.Description));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets id of Node.
+        /// </summary>
+        public int? ParentId
+        {
+            get => this.parentId;
+            set
+            {
+                this.parentId = value;
+                this.OnPropertyChanged(nameof(this.ParentId));
+            }
         }
     }
 }

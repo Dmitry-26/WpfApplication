@@ -1,26 +1,26 @@
-﻿using DoWpfApplication.DtoModels;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using WpfApplication.Commands;
-using WpfApplication.Models;
-using WpfApplication.NetServices;
-
-namespace WpfApplication.ViewModels
+﻿namespace WpfApplication.ViewModels
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Windows.Input;
+    using WpfApplication.Commands;
+    using WpfApplication.Models;
+    using WpfApplication.Models.DtoModels;
+    using WpfApplication.NetServices;
+
+    /// <summary>
+    /// View model of new model adding.
+    /// </summary>
     public class AddNodeViewModel : ViewModelBase
     {
         private Node parentNode;
-        public Node ParentNode { get => parentNode; init => parentNode = value; }
 
         private NodeDtoPostRequest newNode;
-        public NodeDtoPostRequest NewNode { get => newNode; set { newNode = value; OnPropertyChanged(nameof(NewNode)); } }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddNodeViewModel"/> class.
+        /// </summary>
+        /// <param name="parentNode">Node which will parent of new Node.</param>
         public AddNodeViewModel(Node parentNode = null)
         {
             this.ParentNode = parentNode;
@@ -29,19 +29,50 @@ namespace WpfApplication.ViewModels
             this.NewNode.Children = new ObservableCollection<NodeDtoPostRequest>();
         }
 
-        public ICommand SaveCommand
+        /// <summary>
+        /// Gets or initializes ParentNode.
+        /// </summary>
+        public Node ParentNode
         {
-            get => new RelayCommand
-                (
-                    parameter => SaveCommandExecute(),
-                    parameter => SaveCommandCanExecute()
-                );
+            get => this.parentNode;
+            init => this.parentNode = value;
         }
 
+        /// <summary>
+        /// Gets or sets new Node.
+        /// </summary>
+        public NodeDtoPostRequest NewNode
+        {
+            get => this.newNode;
+            set
+            {
+                this.newNode = value;
+                this.OnPropertyChanged(nameof(this.NewNode));
+            }
+        }
+
+        /// <summary>
+        /// Gets Command for saving of new Node.
+        /// </summary>
+        public ICommand SaveCommand
+        {
+            get => new RelayCommand(
+                    parameter => this.SaveCommandExecute(),
+                    parameter => this.SaveCommandCanExecute());
+        }
+
+        /// <summary>
+        /// Saves new Node on server.
+        /// </summary>
         public void SaveCommandExecute()
         {
             new ServerApi(new Uri("http://localhost:5250/api/node")).PostData(this.NewNode);
         }
+
+        /// <summary>
+        /// Determines whether new node may be saved.
+        /// </summary>
+        /// <returns>New Node is valid or not.</returns>
         public bool SaveCommandCanExecute()
         {
             return this.NewNode.IsValid();

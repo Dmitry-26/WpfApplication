@@ -1,32 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using WpfApplication.ViewModels;
-
-namespace WpfApplication
+﻿namespace WpfApplication
 {
+    using System.Windows;
+    using WpfApplication.ViewModels;
+
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MainWindow.xaml.
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
-            InitializeComponent();
-            DataContext = new NodeViewModel();
+            this.InitializeComponent();
+            this.DataContext = new NodeViewModel();
         }
     }
 }
