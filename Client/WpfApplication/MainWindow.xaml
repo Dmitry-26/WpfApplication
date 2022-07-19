@@ -12,42 +12,78 @@
         <ViewModels:NodeViewModel x:Key="ViewModel"/>
     </Window.Resources>
     <Grid>
-        <TreeView x:Name="Tree" 
-                  Margin="63,43,308,184"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.8*"/>
+                <RowDefinition Height="0.2*"/>
+            </Grid.RowDefinitions>
+            <TreeView x:Name="Tree" 
                   Background="AliceBlue" 
                   BorderThickness="1"
-                  BorderBrush="red"
+                  BorderBrush="DarkGray"
+                  Margin="10,10,10,10"
+                  Grid.Row="0"
                   ItemsSource="{Binding Source={StaticResource ViewModel}, Path=Nodes}"
                   SelectedValuePath="{Binding Source={StaticResource ViewModel}, Path=SelectedNode}"
                   HorizontalContentAlignment="Stretch">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <Border BorderThickness="1" BorderBrush="ForestGreen">
-                        <DockPanel MinHeight="48" Width="{Binding Width, ElementName=Tree}">
-                            <WrapPanel DockPanel.Dock="left" Orientation="Vertical">
-                                <TextBox Width="128" DockPanel.Dock="Top" Text="{Binding Name}" Height="24"/>
-                                <TextBox Width="128" DockPanel.Dock="Bottom" Text="{Binding Description}" Height="24"/>
-                            </WrapPanel>
-                            <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="center">
-                                <Button MinWidth="64" Content="Create" HorizontalAlignment="Center"
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <Border BorderThickness="1" BorderBrush="ForestGreen">
+                            <DockPanel MinHeight="48" Width="{Binding Width, ElementName=Tree}">
+                                <WrapPanel DockPanel.Dock="left" Orientation="Vertical">
+                                    <TextBox Width="128" DockPanel.Dock="Top" Text="{Binding Name}" Height="24"/>
+                                    <TextBox Width="128" DockPanel.Dock="Bottom" Text="{Binding Description}" Height="24"/>
+                                </WrapPanel>
+                                <WrapPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="center">
+                                    <Button MinWidth="64" Content="Create" HorizontalAlignment="Center"
                                         Command="{Binding Source={StaticResource ViewModel}, Path=OpenNewNodeCreatingWindow}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=SelectedItem}" >
-                                </Button>
-                                <Button MinWidth="64" Content="Delete" HorizontalAlignment="Center" 
+                                    </Button>
+                                    <Button MinWidth="64" Content="Delete" HorizontalAlignment="Center" 
                                         Command="{Binding Source={StaticResource ViewModel}, Path=DeleteNode}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=TreeView}, Path=SelectedItem}" >
-                                </Button>
-                            </WrapPanel>
-                        </DockPanel>
-                    </Border>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
-        <Border BorderThickness="1" BorderBrush="Red" Margin="544,43,60,329">
-            <TextBox Text="{Binding SelectedItem.Name, ElementName=Tree}" TextWrapping="Wrap"/>
-        </Border>
-        <Border BorderThickness="1" BorderBrush="Red" Margin="544,105,60,152">
-            <TextBox Text="{Binding SelectedItem.Description, ElementName=Tree}" TextWrapping="Wrap"/>
-        </Border>
+                                    </Button>
+                                </WrapPanel>
+                            </DockPanel>
+                        </Border>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <StackPanel Grid.Row="1"
+                        Margin="10,10,10,10"
+                        Orientation="Horizontal">
+                <DockPanel VerticalAlignment="Center">
+                    <Button MinHeight="28"
+                            MinWidth="64"
+                            Content="Create"
+                            Command="{Binding Source={StaticResource ViewModel}, Path=OpenNewNodeCreatingWindow}">
+                    </Button>
+                </DockPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1"
+              Margin="10,10,10,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.15*"/>
+                    <RowDefinition Height="0.85*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" 
+                        BorderThickness="1" 
+                        BorderBrush="Red">
+                    <TextBox Text="{Binding SelectedItem.Name, ElementName=Tree}" TextWrapping="Wrap"/>
+                </Border>
+                <Border Grid.Row="1"
+                        BorderThickness="1"
+                        BorderBrush="Red">
+                    <TextBox Text="{Binding SelectedItem.Description, ElementName=Tree}" TextWrapping="Wrap"/>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
