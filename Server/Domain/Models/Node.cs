@@ -1,50 +1,88 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Errors;
-using Domain.ValidationErrors;
-using Microsoft.EntityFrameworkCore;
-
-namespace Domain.Models;
-public class Node : IValidatableObject
+﻿namespace Domain.Models
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public int? ParentId { get; set; }
-    public Node? Parent { get; set; }
-    public List<Node> Children { get; set; } = new List<Node>();
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using Domain.Errors;
+    using Domain.ValidationErrors;
+    using Microsoft.EntityFrameworkCore;
 
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    /// <summary>
+    /// Model of Node.
+    /// </summary>
+    public class Node : IValidatableObject
     {
-        List<ValidationResult> errors = new List<ValidationResult>();
+        /// <summary>
+        /// Gets or sets Id.
+        /// </summary>
+        /// <value></value>
+        public int Id { get; set; }
 
-        List<string> nullOrEmptyProperties = new List<string>();
-        List<string> uncorrectDataProperties = new List<string>();
+        /// <summary>
+        /// Gets or sets Name.
+        /// </summary>
+        /// <value></value>
+        public string Name { get; set; } = string.Empty;
 
-        if (string.IsNullOrEmpty(this.Name))
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        /// <value></value>
+        public string Description { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets ParentId.
+        /// </summary>
+        public int? ParentId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Parent. It is Navigation Property.
+        /// </summary>
+        public Node? Parent { get; set; }
+
+        /// <summary>
+        /// Gets or sets node children. It is Navigation property.
+        /// </summary>
+        /// <typeparam name="Node">Children of node.</typeparam>
+        public List<Node> Children { get; set; } = new List<Node>();
+
+        /// <summary>
+        /// Validates model.
+        /// </summary>
+        /// <param name="validationContext">Context</param>
+        /// <returns>Results of validation.</returns>
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            nullOrEmptyProperties.Add($"{nameof(this.Name)}");
-        }
-        if (string.IsNullOrEmpty(this.Description))
-        {
-            nullOrEmptyProperties.Add($"{nameof(this.Description)}");
-        }
-        if (this.ParentId != null && this.Id == (int)this.ParentId)
-        {
-            uncorrectDataProperties.Add($"{nameof(this.ParentId)}");
-        }
+            List<ValidationResult> errors = new List<ValidationResult>();
 
-        if (uncorrectDataProperties.Count > 0)
-        {
-            errors.Add(new ValidationError(Error.DetailErrorCodes.DataCollision, $"Properties can made cycle dependence", uncorrectDataProperties));
+            List<string> nullOrEmptyProperties = new List<string>();
+            List<string> incorrectDataProperties = new List<string>();
+
+            if (string.IsNullOrEmpty(this.Name))
+            {
+                nullOrEmptyProperties.Add($"{nameof(this.Name)}");
+            }
+
+            if (string.IsNullOrEmpty(this.Description))
+            {
+                nullOrEmptyProperties.Add($"{nameof(this.Description)}");
+            }
+
+            if (this.ParentId != null && this.Id == (int)this.ParentId)
+            {
+                incorrectDataProperties.Add($"{nameof(this.ParentId)}");
+            }
+
+            if (incorrectDataProperties.Count > 0)
+            {
+                errors.Add(new ValidationError(Error.DetailErrorCodes.DataCollision, $"Properties can made cycle dependence", incorrectDataProperties));
+            }
+
+            if (nullOrEmptyProperties.Count > 0)
+            {
+                errors.Add(new ValidationError(Error.DetailErrorCodes.EmptyValue, "Properties are null, empty, or consists only of white-space characters", nullOrEmptyProperties));
+            }
+
+            return errors;
         }
-
-        if (nullOrEmptyProperties.Count > 0)
-        {
-            errors.Add(new ValidationError(Error.DetailErrorCodes.EmptyValue, "Properties are null, empty, or consists only of white-space characters", nullOrEmptyProperties));
-        }
-
-        return errors;
-
     }
 }

@@ -14,8 +14,8 @@
         /// <param name="message">The message.</param>
         public Error(string code, string message)
         {
-            Code = code;
-            Message = message;
+            this.Code = code;
+            this.Message = message;
         }
 
         /// <summary>
@@ -48,6 +48,7 @@
             /// Value has incorrect format.
             /// </summary>
             IncorrectFormat,
+
             /// <summary>
             /// Entity Id and Id of depended entity are equal
             /// </summary>

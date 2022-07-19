@@ -11,7 +11,7 @@
         /// <param name="error">The error.</param>
         public ErrorResponse(Error error)
         {
-            Error = error;
+            this.Error = error;
         }
 
         /// <summary>

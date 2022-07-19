@@ -1,18 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain.Models;
-
-namespace Infrastructure.EntityFramework;
-public class DatabaseContext : DbContext
+﻿namespace Infrastructure.EntityFramework
 {
-    public DatabaseContext(DbContextOptions<DatabaseContext> parameters)
-        : base(parameters)
-    {
-    }
+    using Microsoft.EntityFrameworkCore;
+    using Domain.Models;
 
-    public DbSet<Node> Nodes { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public class DatabaseContext : DbContext
     {
-        modelBuilder.Entity<Node>().HasKey(node => node.Id);
+        public DatabaseContext(DbContextOptions<DatabaseContext> parameters)
+            : base(parameters)
+        {
+        }
+
+        public DbSet<Node> Nodes { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Node>().HasKey(node => node.Id);
+        }
     }
 }
