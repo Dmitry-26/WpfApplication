@@ -1,15 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Exceptions;
-using Domain.Models;
-using Domain.Validation.Interfaces;
-using Domain.ValidationErrors;
-
 namespace Domain.Validation
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Domain.Exceptions;
+    using Domain.Models;
+    using Domain.Validation.Interfaces;
+    using Domain.ValidationErrors;
+
+    /// <summary>
+    /// Validator for models.
+    /// </summary>
     public class NodeValidator : IModelValidator<Node>
     {
         public void Validate(Node node)

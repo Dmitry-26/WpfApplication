@@ -1,23 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Errors;
-using Domain.Exceptions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
 namespace WebApi.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Domain.Errors;
+    using Domain.Exceptions;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+
     [Route("[controller]")]
     public class ApplicationController : Controller
     {
-        private readonly ILogger<ApplicationController> _logger;
+        private readonly ILogger<ApplicationController> logger;
 
         public ApplicationController(ILogger<ApplicationController> logger)
         {
-            _logger = logger;
+            this.logger = logger;
         }
 
         /// <summary>
