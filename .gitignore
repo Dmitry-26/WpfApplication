@@ -1,2 +1,6 @@
 **/bin
 **/obj
+**/.vs/
+**.sln
+**.csproj.user
+**Properties/
